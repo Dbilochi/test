@@ -1,0 +1,62 @@
+<%= form_tag import_products_path, multipart: true do %>
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group ">
+                    <%= file_field_tag :file, accept: "text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel", class: "form-control col-sm-12 col-md-12", id: "import_file", required: :required%>
+                  </div>
+                </div>
+              </div>
+              <div class="box-footer">
+                <%= submit_tag "Import", class: "btn btn-info col-sm-1 col-md-1 pull-right", id:"import_sw" %>
+              </div>
+          <% end %>
+          <br>
+          <br>
+<%= form_with(model: product, local: true) do |form| %>
+  <% if product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+      <% product.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="form-group">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :product_name, class: "form-control"  %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :price %>
+    <%= form.text_field :price, id: :product_price, class: "form-control"  %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :description %>
+    <%= form.text_area :description, id: :product_description, class: "form-control"  %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit  class:"btn btn-primary"%>
+  </div>
+<% end %>
+<script>
+  $(document).ready(function(){
+      $(function(){
+      $('#import_sw').attr('disabled',true);
+      $('input:file').change(
+        function(){
+            if ($(this).val()){
+                $('input:submit').removeAttr('disabled');
+            }
+            else {
+                $('input:submit').attr('disabled',true);
+            }
+        });
+    });
+  });
+</script>
